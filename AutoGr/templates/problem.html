@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Autograder - Auto Grader - Problem</title>
+    <!-- Add Bootstrap CSS link -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Add highlight.js for syntax highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/default.min.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container">
+            <span class="navbar-brand mb-0 h1">Autograder</span>
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <form method="post" action="{% url 'logout' %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger">Logout</button>
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container">
+        {% if request.user.is_authenticated %}
+        <div class="alert alert-info" role="alert">
+            Welcome, {{ request.user.email }}! {% if request.user.student.best_score %}
+            Your best score: {{ request.user.student.best_score }}{% else %}
+            You haven't made a submission yet.{% endif %}
+        </div>
+        {% endif %}
+        <h1>Coding Problem: Check if a given integer, <code>k</code> is a binary palindrome</h1>
+        <p>Write code for a function that takes an integer as input and returns true if the binary representation of the integer is a palindrome, and false otherwise.</p>
+
+        <h3>Example Test Cases:</h3>
+        <div class="example-test-cases">
+            <pre><code class="python">Test Case 1:
+Input: 5
+Output: True (Explanation: Binary representation of 5 is '101' which is a palindrome)
+
+Test Case 2:
+Input: 10
+Output: False (Explanation: Binary representation of 10 is '1010' which is not a palindrome)</code></pre>
+        </div>
+
+        <div class="alert alert-warning" role="alert">
+            <strong>Note:</strong> Solutions written in Python 3 will only be accepted.
+        </div>
+
+        <!-- Display the score if it exists -->
+        {% if score is not None %}
+        <div class="alert {% if score >= 80 %}alert-success{% elif score >= 60 %}alert-info{% elif score >= 40 %}alert-warning{% else %}alert-danger{% endif %}" role="alert">
+            Your score: {{ score }}%
+        </div>
+        {% endif %}
+
+        <!-- Display test results -->
+        <div class="test-results bg-light p-3">
+            <h3>Test Results:</h3>
+            <pre>{{ test_results }}</pre>
+        </div>
+
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="solution">Enter your solution here:</label>
+                <textarea name="solution" rows="10" cols="50" class="form-control" id="code" data-language="python" placeholder="Write your Python function here..."></textarea><br>
+            </div>
+            <div class="form-group">
+                <label for="file">Or upload your solution file:</label>
+                <input type="file" name="file" class="form-control-file"><br>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+    <!-- Add highlight.js for syntax highlighting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/highlight.min.js"></script>
+    <!-- Initialize highlight.js -->
+    <script>hljs.highlightAll();</script>
+    <!-- Add Bootstrap JavaScript link (optional) -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
